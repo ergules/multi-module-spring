@@ -1,46 +1,44 @@
 package com.example.multimodule.library.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.example.multimodule.library.db.CustomMessage;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Import(Config.class)
-@PropertySource("classpath:mm-library-test.properties")
+@Transactional
 public class MyServiceTest {
 
-	@Autowired
-	private MyService myService;
+    @Autowired
+    private MyService myService;
 
-	@Autowired
-	EntityManager manager;
+    @Autowired
+    EntityManager em;
 
-	@Test
-	public void contextLoads() {
-		assertThat(myService.message()).isNotNull();
-	}
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	public void whenCustomMessageUpdatedReturnNew() {
-		String newMessage = "new-message";
-		myService.saveCustom(newMessage);
+    @Test
+    void whenCustomMessageUpdatedReturnNew() {
+        String newMessage = "new-message" + Instant.now().getEpochSecond();
+        myService.saveCustom(newMessage);
 
-		CustomMessage msg = manager.find(CustomMessage.class, 1L);
-		assertThat(msg.getMessage()).isEqualTo(newMessage);
-	}
+        CustomMessage msg = em.find(CustomMessage.class, 1L);
+        assertThat(msg.getMessage()).isEqualTo(newMessage);
+    }
 
-	@SpringBootApplication
-	static class TestConfiguration {
-	}
+    @Test
+    void dataScriptLoaded() {
+        long count = (long) em.createQuery("select count(c) from CustomMessage c")
+                .getSingleResult();
+        assertThat(count).isEqualTo(2);
+    }
 
 }
