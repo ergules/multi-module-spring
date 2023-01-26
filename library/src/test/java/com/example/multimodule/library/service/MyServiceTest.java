@@ -1,6 +1,6 @@
 package com.example.multimodule.library.service;
 
-import com.example.multimodule.library.db.CustomMessage;
+import com.example.multimodule.library.entity.CustomMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

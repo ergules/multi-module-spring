@@ -9,8 +9,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>library</module>
         <module>application</module>
+        <module>library</module>
+        <module>batch</module>
     </modules>
 
 </project>

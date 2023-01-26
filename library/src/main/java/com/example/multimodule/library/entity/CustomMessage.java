@@ -1,4 +1,4 @@
-package com.example.multimodule.library.db;
+package com.example.multimodule.library.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
